@@ -195,3 +195,35 @@ export const topicPostsQuery = (topic: string | string[]) => {
 
   return query;
 };
+
+export const categoryPostsQuery = (category: string | string[]) => {
+  const query = `*[_type == "post" && category match '${category}*'] {
+    _id,
+     caption,
+       video{
+        asset->{
+          _id,
+          url
+        }
+      },
+      userId,
+    postedBy->{
+      _id,
+      userName,
+      image
+    },
+ likes,
+
+    comments[]{
+      comment,
+      _key,
+      postedBy->{
+      _id,
+      userName,
+      image
+    },
+    }
+  }`;
+
+  return query;
+};

@@ -1,5 +1,6 @@
 import axios from "axios"
 import type { NextPage } from "next"
+import Head from "next/head";
 import NoResults from "../components/NoResults";
 import VideoCard from "../components/VideoCard";
 import { Video } from '../types';
@@ -9,9 +10,11 @@ interface IProps {
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 const Home: NextPage = ({ videos }: IProps) => {
-  console.log(videos)
   return (
     <div className='flex flex-col gap-10 videos h-full'>
+      <Head>
+        <title>Tik Tik - Make Your Day</title>
+      </Head>
       {videos.length
         ? videos?.map((video: Video) => (
           <VideoCard post={video} key={video._id} />

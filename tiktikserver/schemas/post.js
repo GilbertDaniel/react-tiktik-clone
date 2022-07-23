@@ -48,5 +48,11 @@ export default {
         title: 'Topic',
         type: 'string',
       },
+
+      {
+        name: 'category',
+        title: 'Category',
+        type: 'string',
+      },
     ],
   };
