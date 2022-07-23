@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import { GoVerified } from 'react-icons/go'
 import Image from 'next/image'
 import Link from 'next/link'
-import { MdOutlineCancel } from 'react-icons/md'
+import { MdInsertComment, MdOutlineCancel, MdOutlineComment, MdThumbUp, MdOutlineThumbUp } from 'react-icons/md'
 import { BsFillPlayFill } from 'react-icons/bs'
 import { HiVolumeUp, HiVolumeOff } from 'react-icons/hi'
 import axios from 'axios'
@@ -25,6 +25,7 @@ const Detail = ({ postDetails }: IProps) => {
     const router = useRouter()
     const [comment, setComment] = useState('')
     const [isPostingComment, setIsPostingComment] = useState(false)
+    const [viewComments, setViewComments] = useState(false)
 
     const { userProfile }: any = useAuthStore()
 
@@ -37,6 +38,17 @@ const Detail = ({ postDetails }: IProps) => {
             setPlaying(true);
         }
     };
+
+
+    const onCommentClick = () => {
+        if (!viewComments) {
+            setViewComments(true)
+            console.log("Views Comments")
+        } else {
+            setViewComments(false)
+            console.log("Hide Comments")
+        }
+    }
 
     const handleLike = async (like: boolean) => {
         if (userProfile) {
@@ -143,23 +155,88 @@ const Detail = ({ postDetails }: IProps) => {
                         <p className=' text-md text-gray-600'>{post.caption}</p>
                     </div>
                     {/* Caption */}
-                    {/* Like Button */}
-                    <div className='mt-10 px-10'>
-                        {userProfile && <LikeButton
-                            likes={post.likes}
-                            flex='flex'
-                            handleLike={() => handleLike(true)}
-                            handleDislike={() => handleLike(false)}
-                        />}
+
+                    <div className='flex gap-2 mt-10 px-10'>
+                        {/* Like Button */}
+                        {userProfile ? (
+                            <LikeButton
+                                likes={post.likes}
+                                flex='flex'
+                                handleLike={() => handleLike(true)}
+                                handleDislike={() => handleLike(false)}
+                            />
+                        ) : (
+                            <div className='mt-4 justify-center items-center cursor-pointer'>
+                                {
+                                    post?.likes?.length ? (
+                                        <div className='bg-primary rounded-full p-2 md:p-4 text-[#F51997] '>
+                                            <MdOutlineThumbUp
+                                                className='text-lg md:text-2xl'
+                                            />
+                                        </div>
+
+                                    ) : (
+                                        <div className='bg-primary rounded-full p-2 md:p-4 '>
+                                            <MdThumbUp
+                                                className='text-lg md:text-2xl'
+                                            />
+                                        </div>
+                                    )
+                                }
+                                <p className='text-md font-semibold text-center mb-3 mt-3'>{post?.likes?.length || 0}</p>
+                            </div>
+
+
+                        )}
+                        {/* Like Button */}
+                        {/* Comment Button */}
+                        <div className='mt-4 justify-center items-center cursor-pointer'>
+                            {
+                                post?.comments?.length ? (
+                                    <div className='bg-primary rounded-full p-2 md:p-4 text-[#F51997] '>
+                                        {
+                                            userProfile ? (
+                                                <MdInsertComment
+                                                    className='text-lg md:text-2xl'
+                                                    onClick={onCommentClick}
+                                                />
+                                            ) : (
+                                                <MdInsertComment
+                                                    className='text-lg md:text-2xl'
+                                                />
+                                            )
+                                        }
+                                    </div>
+                                ) : (
+                                    <div className='bg-primary rounded-full p-2 md:p-4 '>
+                                        {
+                                            userProfile ? (
+                                                <MdOutlineComment
+                                                    className='text-lg md:text-2xl'
+                                                    onClick={onCommentClick}
+                                                />
+                                            ) : (
+                                                <MdOutlineComment
+                                                    className='text-lg md:text-2xl'
+                                                />
+                                            )
+                                        }
+                                    </div>
+                                )
+                            }
+                            <p className='text-md font-semibold text-center mb-3 mt-3'>{post?.comments?.length || 0}</p>
+                        </div>
+                        {/* Comment Button */}
                     </div>
-                    {/* Like Button */}
-                    <Comments
-                        comment={comment}
-                        setComment={setComment}
-                        addComment={addComment}
-                        comments={post.comments}
-                        isPostingComment={isPostingComment}
-                    />
+                    {
+                        viewComments && <Comments
+                            comment={comment}
+                            setComment={setComment}
+                            addComment={addComment}
+                            comments={post.comments}
+                            isPostingComment={isPostingComment}
+                        />
+                    }
                 </div>
             </div>
             {/* Right Side */}

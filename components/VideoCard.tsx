@@ -7,6 +7,7 @@ import { BsFillPlayFill, BsFillPauseFill } from 'react-icons/bs'
 import { GoVerified } from 'react-icons/go'
 import { BsPlay } from 'react-icons/bs'
 import { Video } from './../types'
+import { MdInsertComment, MdOutlineComment, MdThumbUp, MdOutlineThumbUp } from 'react-icons/md';
 
 interface IProps {
     post: Video
@@ -69,7 +70,7 @@ const VideoCard: NextPage<IProps> = ({ post }) => {
                     onMouseLeave={() => setIsHover(false)}
                     className='rounded-3xl'
                 >
-                     <Link href={`/detail/${post._id}`}>
+                    <Link href={`/detail/${post._id}`}>
                         <video
                             loop
                             ref={videoRef}
@@ -100,6 +101,41 @@ const VideoCard: NextPage<IProps> = ({ post }) => {
                             )}
                         </div>
                     )}
+                </div>
+                <div className='mt-4 gap-5 px-10 justify-center items-center cursor-pointer'>
+                    {
+                        post?.comments?.length ? (
+                            <div className='bg-primary rounded-full p-2 md:p-4 text-[#F51997] '>
+                                <MdInsertComment
+                                    className='text-lg md:text-2xl'
+                                />
+                            </div>
+                        ) : (
+                            <div className='bg-primary rounded-full p-2 md:p-4 '>
+                                <MdOutlineComment
+                                    className='text-lg md:text-2xl'
+                                />
+                            </div>
+                        )
+                    }
+                    <p className='text-md font-semibold text-center mb-3 mt-3'>{post?.comments?.length || 0}</p>
+
+                    {
+                        post?.likes?.length ? (
+                            <div className='bg-primary rounded-full p-2 md:p-4 text-[#F51997] '>
+                                <MdOutlineThumbUp
+                                    className='text-lg md:text-2xl'
+                                />
+                            </div>
+                        ) : (
+                            <div className='bg-primary rounded-full p-2 md:p-4 '>
+                                <MdThumbUp
+                                    className='text-lg md:text-2xl'
+                                />
+                            </div>
+                        )
+                    }
+                    <p className='text-md font-semibold text-center mb-3 mt-3'>{post?.likes?.length || 0}</p>
                 </div>
             </div>
         </div>
